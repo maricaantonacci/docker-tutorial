@@ -25,11 +25,13 @@ markdown_extensions:
    
 nav:
   - Intro: 
-    - Docker info: 'basics/index.md'
-    - Run your first container: 'basics/hello-world.md'
-    - Where are Docker images stored?: 'basics/images.md'
-    - Docker container lifecycle: 'basics/container.md'
+    - Docker info: 'intro/index.md'
+    - Run your first container: 'intro/hello-world.md'
+    - Where are Docker images stored?: 'intro/images.md'
+    - Docker container lifecycle: 'intro/container.md'
   - Docker Container manipulation:
     - Work with your first container: 'container/manipulation.md'
+  - Going further:
+    - Run a dockerized service: 'container/example.md'
 
 copyright: Copyright &copy; 2021 INFN
