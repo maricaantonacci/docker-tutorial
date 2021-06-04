@@ -1,0 +1,34 @@
+site_name: Docker Tutorial
+repo_url: https://github.com/maricaantonacci/docker-tutorial
+theme:
+  name: material
+  palette:
+    primary: teal
+    accent: green
+  logo: assets/logo_infn.png
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - toc.integrate
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences 
+  - pymdownx.snippets
+  - pymdownx.tabbed
+  - admonition
+  - pymdownx.details
+  - attr_list
+   
+nav:
+  - Intro: 
+    - Docker info: 'basics/index.md'
+    - Run your first container: 'basics/hello-world.md'
+    - Where are Docker images stored?: 'basics/images.md'
+    - Docker container lifecycle: 'basics/container.md'
+  - Docker Container manipulation:
+    - Work with your first container: 'container/manipulation.md'
+
+copyright: Copyright &copy; 2021 INFN
