@@ -1,5 +1,6 @@
 site_name: Docker Tutorial
 repo_url: https://github.com/maricaantonacci/docker-tutorial
+site_author: Marica Antonacci - marica.antonacci@ba.infn.it
 theme:
   name: material
   palette:
