@@ -33,5 +33,9 @@ nav:
     - Work with your first container: 'container/manipulation.md'
   - Going further:
     - Run a dockerized service: 'container/example.md'
+  - Container networking:
+    - Bridge mode and port mapping: 'container/networking.md'
+  - Persistent data:
+    - Docker volumes and bind-mounts: 'container/volumes.md'
 
 copyright: Copyright &copy; 2021 INFN
