@@ -37,5 +37,8 @@ nav:
     - Bridge mode and port mapping: 'container/networking.md'
   - Persistent data:
     - Docker volumes and bind-mounts: 'container/volumes.md'
+    - Docker volume plugins - an example: 'container/volume_plugin.md'
+    - Summary: 'container/volume_summary.md'
 
+ 
 copyright: Copyright &copy; 2021 INFN

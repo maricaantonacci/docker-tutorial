@@ -31,7 +31,7 @@ Source: [https://twitter.com/pierrecdn/status/620587662928424960](https://twitte
   ```
 - **docker kill** command will kill all the processes in the container: the main process will be sent a SIGKILL or any signal specified with option `–signal`.
   ```bash
-     docker unpause <container name>  
+     docker kill <container name>  
   ```
 
 ## Docker command syntax

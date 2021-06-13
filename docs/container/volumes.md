@@ -86,8 +86,105 @@ docker container rm -f nginx3
 
 Recreate it with the volume mounted:
 ```bash
-docker container run -d -p 8080:80 --name nginx3 --mount source=myvol,destination=/usr/share/nginx/html nginx
+docker container run -d -p 8080:80 --name nginx3 --mount type=volume,source=myvol,destination=/usr/share/nginx/html nginx
 ```
 
+!!! note
+    - if we didn’t create the volume earlier docker will create it for us with the name given in source field of `--mount` parameter
+    - volumes by default will not be deleted while we removing the container
+    - if the container has got in `target` directory any files, this files will be copied into the volume
 
+Enter the container and modify the welcome page:
+
+```bash
+docker exec -it nginx3 bash
+```
+
+Once inside the container, run the following command:
+
+```bash
+echo "I've changed the content of this file in the docker volume" > /usr/share/nginx/html/index.html
+```
+
+![](images/nginx_volume.png)
+
+Let' stop and remove this container and create a new one with the same command:
+
+```bash
+docker rm -f nginx3
+```
+then
+```bash
+docker container run -d -p 8080:80 --name nginx3 --mount type=volume,source=myvol,destination=/usr/share/nginx/html nginx
+```
+
+If we load the page again we will still see the html file that we edited in the volume.
+
+### Using bind mounts
+
+!!! note
+    - if we didn’t create a directory on docker host earlier docker will not create it for us with `--mount` parameter, auto-creating is available only in older `--volume`
+    - bind mounts by default will not be deleted while removing the container
+    - if the container has got in `target` directory any files, this files will **NOT** be copied into bind mount directory, bind directory will cover any files in a target container directory
+
+Try the following command:
+
+```bash
+docker container run -d -p 8088:80 --name nginx4 --mount type=bind,source=/tmp/nginx,destination=/usr/share/nginx/html nginx
+```
+
+You will get an error since the path `/tmp/nginx` does not exist:
+```
+docker: Error response from daemon: invalid mount config for type "bind": bind source path does not exist: /tmp/nginx.
+See 'docker run --help'.
+```
+
+Let's create the directory on the host:
+
+```bash
+mkdir /tmp/nginx
+```
+
+Now re-run the command for creating the container:
+
+```bash
+docker container run -d -p 8088:80 --name nginx4 --mount type=bind,source=/tmp/nginx,destination=/usr/share/nginx/html nginx
+```
+
+If you inspect the container you will see the bind-mount:
+
+```bash
+docker container inspect nginx4
+```
+
+```bash
+...
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "/tmp/nginx",
+                    "Target": "/usr/share/nginx/html"
+                }
+            ],
+...
+```
+
+Connect to port `8088` on the host IP to see the result:
+
+![](images/nginx_volume_2.png)
+
+As you can see we get an error message from nginx as the bind-mount has overwritten the content of `/usr/share/nginx/html` (Remember that the behaviour with docker volumes is different, any file inside the container is copied in the volume)
+
+Let's create the `index.html` file in the host path `/tmp/nginx`:
+
+```bash
+echo "I've changed the content of this file on the host" > /tmp/nginx/index.html
+```
+
+Then reload the page in the browser:
+
+![](images/nginx_volume_3.png) 
+
+!!! question
+    As done before, try to remove the container and recreate it with the same bind-mount...what happens?
 
