@@ -1,4 +1,4 @@
-site_name: Docker Tutorial
+site_name: Docker Tutorial - part 1
 repo_url: https://github.com/maricaantonacci/docker-tutorial
 site_author: Marica Antonacci - marica.antonacci@ba.infn.it
 theme:
@@ -39,6 +39,8 @@ nav:
     - Docker volumes and bind-mounts: 'container/volumes.md'
     - Docker volume plugins - an example: 'container/volume_plugin.md'
     - Summary: 'container/volume_summary.md'
+  - Docker web UI:
+    - Portainer: 'gui/portainer.md'
 
  
 copyright: Copyright &copy; 2021 INFN
