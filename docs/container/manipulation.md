@@ -96,7 +96,7 @@ Our container will restart with the same options we had specified when we launch
 
 The `docker container attach` command allows you to attach your terminal to the running container. 
 
-!!! tip:
+!!! tip
     The command that is executed when starting a container is specified using the ENTRYPOINT and/or CMD instruction in the Dockerfile.
     The `attach` command allows you to connect and interact with the container’s main process which has `PID 1`.
     Remember that **if you kill the main process the container will terminate**.
