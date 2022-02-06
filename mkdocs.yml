@@ -39,6 +39,8 @@ nav:
     - Docker volumes and bind-mounts: 'container/volumes.md'
     - Docker volume plugins - an example: 'container/volume_plugin.md'
     - Summary: 'container/volume_summary.md'
+  - Environment variables:
+    - How to pass env variables to a container: 'container/env_vars.md'
   - Docker web UI:
     - Portainer: 'gui/portainer.md'
 
