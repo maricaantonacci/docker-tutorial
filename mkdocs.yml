@@ -43,6 +43,20 @@ nav:
     - How to pass env variables to a container: 'container/env_vars.md'
   - Docker web UI:
     - Portainer: 'gui/portainer.md'
+  - Building images:
+    - Building interactively: 'image/intro/index.md'
+    - Dockerfiles:
+      - Overview of basic instructions : 'image/dockerfile/instructions.md'
+      - Write the first Dockerfile: 'image/dockerfile/first-dockerfile.md'
+      - The CMD and ENTRYPOINT verbs: 'image/dockerfile/cmd-entrypoint.md'
+      - Copying files during the build: 'image/dockerfile/copy.md'
+      - Exercise: 'image/dockerfile/exercise.md'
+    - Cache and dangling images:
+      - ... or what are those nasty <none> tags: 'image/cacheimaegs/cache-dangling.md'
+    - Docker Registry:
+      - Publishing images to the Docker hub: 'image/registry/dockerhub.md'
+    - multi-stage example:
+      - Our first multi-stage Dockerfile: 'image/multistage/multistage-example.md'
 
  
 copyright: Copyright &copy; 2022 INFN
