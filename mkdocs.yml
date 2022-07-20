@@ -52,7 +52,7 @@ nav:
       - Copying files during the build: 'image/dockerfile/copy.md'
       - Exercise: 'image/dockerfile/exercise.md'
     - Cache and dangling images:
-      - ... or what are those nasty <none> tags: 'image/cacheimaegs/cache-dangling.md'
+      - ... or what are those nasty <none> tags: 'image/cacheimages/cache-dangling.md'
     - Docker Registry:
       - Publishing images to the Docker hub: 'image/registry/dockerhub.md'
     - multi-stage example:
