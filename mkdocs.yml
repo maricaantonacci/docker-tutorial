@@ -1,4 +1,4 @@
-site_name: Docker Tutorial - part 1
+site_name: Docker Tutorial
 repo_url: https://github.com/infn-bari-school/docker-tutorial
 site_author: Marica Antonacci - marica.antonacci@ba.infn.it
 theme:
@@ -34,7 +34,7 @@ nav:
   - Going further:
     - Run a dockerized service: 'container/example.md'
   - Container networking:
-    - Bridge mode and port mapping: 'container/networking.md'
+    - Bridge mode and port mapping: 'networking/networking.md'
   - Persistent data:
     - Docker volumes and bind-mounts: 'container/volumes.md'
     - Docker volume plugins - an example: 'container/volume_plugin.md'
