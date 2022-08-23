@@ -18,14 +18,16 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences 
   - pymdownx.snippets
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true 
   - admonition
   - pymdownx.details
   - attr_list
    
 nav:
   - Intro: 
-    - Docker info: 'intro/index.md'
+    - Install docker engine on Ubuntu: 'intro/install.md'
+    - Docker info: 'intro/info.md'
     - Run your first container: 'intro/hello-world.md'
     - Where are Docker images stored?: 'intro/images.md'
     - Docker container lifecycle: 'intro/container.md'

@@ -7,14 +7,15 @@ docker info
 
 You will get something like the following output:
 
-```bash linenums="1" hl_lines="16 26 47 49"
+```bash linenums="1" hl_lines="16 26 48 50"
 Client:
  Context:    default
  Debug Mode: false
  Plugins:
   app: Docker App (Docker Inc., v0.9.1-beta3)
-  buildx: Build with BuildKit (Docker Inc., v0.5.1-docker)
-  scan: Docker Scan (Docker Inc., v0.7.0)
+  buildx: Docker Buildx (Docker Inc., v0.8.2-docker)
+  compose: Docker Compose (Docker Inc., v2.6.0)
+  scan: Docker Scan (Docker Inc., v0.17.0)
 
 Server:
  Containers: 0
@@ -22,7 +23,7 @@ Server:
   Paused: 0
   Stopped: 0
  Images: 0
- Server Version: 20.10.6
+ Server Version: 20.10.17
  Storage Driver: overlay2
   Backing Filesystem: extfs
   Supports d_type: true
@@ -39,21 +40,21 @@ Server:
  Runtimes: io.containerd.runc.v2 io.containerd.runtime.v1.linux runc
  Default Runtime: runc
  Init Binary: docker-init
- containerd version: 05f951a3781f4f2c1911b05e61c160e9c30eaa8e
- runc version: 12644e614e25b05da6fd08a38ffa0cfe1903fdec
+ containerd version: 0197261a30bf81f1ee8e6a4dd2dea0ef95d67ccb
+ runc version: v1.1.3-0-g6724737
  init version: de40ad0
  Security Options:
   apparmor
   seccomp
    Profile: default
- Kernel Version: 5.4.0-60-generic
- Operating System: Ubuntu 20.04.1 LTS
+ Kernel Version: 5.4.0-122-generic
+ Operating System: Ubuntu 20.04.4 LTS
  OSType: linux
  Architecture: x86_64
- CPUs: 2
- Total Memory: 3.844GiB
+ CPUs: 1
+ Total Memory: 1.937GiB
  Name: tutorvm-1
- ID: XQM7:BP2R:Y2C2:37N2:LFN6:HBUI:AFFK:U36L:HASH:HHNK:YUZV:EXKX
+ ID: Y3GV:AHBF:EWXJ:32WB:6ADM:HGJW:XS5X:AH7N:XAVB:35JP:2T4P:KQ4M
  Docker Root Dir: /var/lib/docker
  Debug Mode: false
  Registry: https://index.docker.io/v1/
