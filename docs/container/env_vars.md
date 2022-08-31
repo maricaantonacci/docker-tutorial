@@ -9,7 +9,7 @@ When we launch our Docker container, **we can pass environment variables as key-
 For instance, let's execute the following command:
 
 ```
-$ docker run --rm --env VARIABLE1=foobar alpine env
+docker run --rm --env VARIABLE1=foobar alpine env
 ```
 
 The environment variables we set will be printed to the console:
@@ -58,7 +58,7 @@ $ echo VARIABLE3=foobar3 >> my-env.txt
 Now, let's inject this file into our Docker container:
 
 ```
-$ docker run --env-file my-env.txt alpine:3 env
+docker run --env-file my-env.txt alpine:3 env
 ```
 
 Finally, let's take a look at the output:
