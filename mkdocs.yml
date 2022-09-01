@@ -43,6 +43,8 @@ nav:
     - Summary: 'data/volume_summary.md'
   - Environment variables:
     - How to pass env variables to a container: 'container/env_vars.md'
+  - Health checks:
+    - How to add a health check to your docker container: 'container/health_checks.md'
   - Docker web UI:
     - Portainer: 'gui/portainer.md'
   - Building images:
