@@ -276,4 +276,4 @@ and then use your web browser to access wordpress on port 8080.
 - Create a volume `db_data` to provide persistent storage for the DBMS
 - Launch MySQL (image name: `mysql:5.7`) with container name `db`, using the previously created volume, and pass environment variables to the container to configure it
 - Inspect the MySQL container finding its private IP
-- Launch WordPress (image name: `wordpress:latest`) with container name `wordpress`, and pass environment variables to the container to configure it (using as db host the IP of the mysql container).
+- Launch WordPress (image name: `wordpress:latest`) with container name `wordpress`, and pass environment variables to the container to configure it (using as db host the IP of the MySQL container).
