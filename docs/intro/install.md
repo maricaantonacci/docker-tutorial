@@ -51,6 +51,8 @@ If you don’t want to preface the `docker` command with `sudo`, add users to th
 sudo usermod -aG docker $USER
 ```
 
+- Log out and log back in so that your group membership is re-evaluated.
+
 ## Verify
 
 === "Command"
