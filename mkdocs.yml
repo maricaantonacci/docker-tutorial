@@ -39,13 +39,8 @@ nav:
     - Docker volumes and bind-mounts: 'data/volumes.md'
     #- Docker volume plugins - an example: 'data/volume_plugin.md'
     - Summary: 'data/volume_summary.md'
-<<<<<<< HEAD
   - Container networking:
     - Bridge mode and port mapping: 'networking/networking.md'
-  - Environment variables:
-    - How to pass env variables to a container: 'container/env_vars.md'
-=======
->>>>>>> d424d9e06e751c3f5c5cac06663c07836f79c9e0
   - Health checks:
     - How to add a health check to your docker container: 'container/health_checks.md'
   - Docker web UI:
