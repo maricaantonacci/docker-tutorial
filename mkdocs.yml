@@ -35,6 +35,8 @@ nav:
     - Work with your first container: 'container/manipulation.md'
   - Going further:
     - Run a dockerized service: 'container/example.md'
+  - Environment variables:
+    - How to pass env variables to a container: 'container/env_vars.md'  
   - Persistent data:
     - Docker volumes and bind-mounts: 'data/volumes.md'
     #- Docker volume plugins - an example: 'data/volume_plugin.md'
