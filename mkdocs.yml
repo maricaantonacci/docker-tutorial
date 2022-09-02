@@ -35,14 +35,14 @@ nav:
     - Work with your first container: 'container/manipulation.md'
   - Going further:
     - Run a dockerized service: 'container/example.md'
+  - Environment variables:
+    - How to pass env variables to a container: 'container/env_vars.md'
   - Container networking:
     - Bridge mode and port mapping: 'networking/networking.md'
   - Persistent data:
     - Docker volumes and bind-mounts: 'data/volumes.md'
     #- Docker volume plugins - an example: 'data/volume_plugin.md'
     - Summary: 'data/volume_summary.md'
-  - Environment variables:
-    - How to pass env variables to a container: 'container/env_vars.md'
   - Health checks:
     - How to add a health check to your docker container: 'container/health_checks.md'
   - Docker web UI:
