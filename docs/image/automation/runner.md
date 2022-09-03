@@ -39,7 +39,7 @@ In this section we will add a dedicated GitLab runner to the CI/CD infrastructur
           Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml" 
           ```
           and your runner will appear under the specific runners of the project:
-          ![](images/reg_runner_3.png
+          ![](images/reg_runner_3.png)
 
 Now you can disable the shared runners and use your newly created one:
 ![](images/reg_runner_4.png)
