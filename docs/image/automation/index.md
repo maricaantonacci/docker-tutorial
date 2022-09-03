@@ -74,7 +74,7 @@ build_base_image:
 And then commit everything into gitlab that you already created in previous tutorials:
 
 ```bash
-git remote add origin https://baltig.infn.it/ciangottini/tutoria-ci.git
+git remote add origin https://baltig.infn.it/ciangottini/tutorial-ci.git
 git add .
 git commit -m "Initial commit"
 git push -u origin main
@@ -85,13 +85,13 @@ git push -u origin main
 
 ## Monitor the building process
 
-Pipeline monitoring page is available at your repo site like https://baltig.infn.it/ciangottini/tutoria-ci/-/pipelines
+Pipeline monitoring page is available at your repo site like `https://baltig.infn.it/ciangottini/tutorial-ci/-/pipelines`
 
 Or via CLI:
 
 ```bash
 $ glab ci list
-Showing 3 pipelines on ciangottini/tutoria-ci (Page 1)
+Showing 3 pipelines on ciangottini/tutorial-ci (Page 1)
 
 (running) • #82282  main  (less than a minute ago)
 (failed) • #82281   main  (about 4 minutes ago)   
@@ -100,9 +100,9 @@ Showing 3 pipelines on ciangottini/tutoria-ci (Page 1)
 
 and then you can get details via `glab ci view #82281`. Or you than live tracing the progress log via `glab ci trace #82285`
 
-Once completed you should be able to see the docker image stored on gitlab registry at something like https://baltig.infn.it/ciangottini/tutoria-ci/container_registry
+Once completed you should be able to see the docker image stored on gitlab registry at something like `https://baltig.infn.it/ciangottini/tutorial-ci/container_registry`
 
-The container is now ready to be pulled from the registry via: `docker pull baltig.infn.it:4567/ciangottini/tutoria-ci`
+The container is now ready to be pulled from the registry via: `docker pull baltig.infn.it:4567/ciangottini/tutorial-ci`
 
 ## Use your own runner from a dedicated VM
 
