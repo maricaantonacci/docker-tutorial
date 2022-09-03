@@ -5,7 +5,7 @@ In this section you'll learn how to leverage CI/CD pipilines in INFN baltig (or 
 - baltig.infn.it account and access
 - gitlab CLI:
     - `curl -s https://gitlab.com/gitlab-org/cli/-/raw/main/scripts/install.sh | sudo sh`
-- a baltig token with 'api' and 'write_repository' scopes
+- a baltig token with 'api' and 'write_repository' scopes (see below)
 - having followed the [previous](../dockerfile/exercise.md) tutorial
 
 ## Create a git repository with your app
@@ -74,11 +74,14 @@ build_base_image:
 And then commit everything into gitlab that you already created in previous tutorials:
 
 ```bash
-git remote add origin git@baltig.infn.it:ciangottini/tutoria-ci.git
+git remote add origin https://baltig.infn.it/ciangottini/tutoria-ci.git
 git add .
 git commit -m "Initial commit"
 git push -u origin main
 ```
+
+!!! warning
+    Remember to replace `ciangottini` with **your baltig username**!!
 
 ## Monitor the building process
 
