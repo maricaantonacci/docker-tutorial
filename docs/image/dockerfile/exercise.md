@@ -2,13 +2,17 @@
 The main objective of the exercise is to add a Dockerfile to a Python App. So we have an application and we are asked to do the following:
 * we need to create a Dockerfile that runs our python application and expose on a well defined port, let's say the 9000. On that port the app will return the environment variable `ENVIRONMENT=production` ( unless we will ask to return something different ) 
 
-!!! tip
-    You can get the files needed to complete the exercise either from git `git clone  https://github.com/spigad/simple-exercise.git` or just cut&paste the code here below. 
+First of all, let's move on a different root directory called `flask`:
+
+```bash
+mkdir -p flask
+cd flask
+```
 
 ### The App
 
 A simple python3 API that only responds at `/`. It returns the value
-of the `ENVIRONMENT` environment var as JSON.
+of the `ENVIRONMENT` environment var as JSON. Save the following code in a file named `app.py`:
 
 ```python
 from flask import Flask
@@ -30,6 +34,14 @@ if __name__ == "__main__":
         sys.exit(1)
     port = int(sys.argv[1])
     app.run(host='0.0.0.0', port=port)
+```
+
+And also, let's add a simple entrypoint that looks like `startup.sh`:
+
+```bash
+#!/bin/bash
+
+python app.py ${PORT}
 ```
 
 ### The  Dependencies
@@ -70,6 +82,7 @@ COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
 ENV PORT="3000"
+ENV ENVIRONMENT="prod" 
 
 EXPOSE ${PORT}
 

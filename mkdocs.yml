@@ -61,6 +61,7 @@ nav:
       - Publishing images to the Docker hub: 'image/registry/dockerhub.md'
     - multi-stage example:
       - Our first multi-stage Dockerfile: 'image/multistage/multistage-example.md'
+  - CI/CD build automation: 'image/automation/index.md'  
 
  
 copyright: Copyright &copy; 2022 INFN

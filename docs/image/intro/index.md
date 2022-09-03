@@ -127,6 +127,9 @@ you will get your expected output:
 root@be9e5e08db21:/#
 ```
 
+!!! tip
+    in one line command you could have typed the following with the same result: `docker run interactivefiglet figlet ciao ciao`
+
 This is ok for quick & dirty test and playground .. but what about if we need to be reproducible, automated ? 
 To this end we need to learn the build process by writing a Dockerfile.
 
