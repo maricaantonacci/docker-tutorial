@@ -61,7 +61,10 @@ nav:
       - Publishing images to the Docker hub: 'image/registry/dockerhub.md'
     - multi-stage example:
       - Our first multi-stage Dockerfile: 'image/multistage/multistage-example.md'
-  - CI/CD build automation: 'image/automation/index.md'  
+  - CI/CD build automation: 
+    - How to use Gitlab CI/CD to build your image automatically: 'image/automation/index.md'  
+    - Use your own runner from a dedicated VM: 'image/automation/runner.md'
+    - Exercises: 'image/automation/exercises.md'
 
  
 copyright: Copyright &copy; 2022 INFN

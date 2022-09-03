@@ -43,7 +43,7 @@ The minimum required scopes are 'api' and 'write_repository'.
 ```
 
 
-## Create a pipe line to automaticcally build your image
+## Create a pipeline to automatically build your image
 
 Create a file `.gitlab-ci.yml` with your workflow description:
 
@@ -104,14 +104,3 @@ Once completed you should be able to see the docker image stored on gitlab regis
 
 The container is now ready to be pulled from the registry via: `docker pull baltig.infn.it:4567/ciangottini/tutorial-ci`
 
-## Use your own runner from a dedicated VM
-
-TODO
-
-## Exercise: Create a pipe line to periodically build your latest tag
-
-HandsOn live
-
-## Exercise: push image to dockerHUB instead
-
-HandsOn live
