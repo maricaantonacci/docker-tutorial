@@ -155,3 +155,11 @@ The container is now flagged as unhealthy.
 !!! question "Exercise"
     Restore the `index.html` file and verify the container status.
 
+## Lab challenge
+
+**Goal**: create a MariaDB container configuring a custom health check to check whether the server is available.
+
+!!! info "Hints"
+    * Search for mariadb official docker image on [docker hub](https://hub.docker.com/)
+    * Read the documentation and understand the minimum required environment variables to start your server
+    * Specify a simple health check using the tool "[mysqladmin](https://mariadb.com/kb/en/mysqladmin/)" to check if the server is alive   
