@@ -268,12 +268,12 @@ Then reload the page in the browser:
 __Goal__: create a service based on two containers: 
 
 1. WordPress 
-2. MySQL 
+2. MariaDB 
 
 and then use your web browser to access wordpress on port 8080.
 
 !!! tip
 - Create a volume `db_data` to provide persistent storage for the DBMS
-- Launch MySQL (image name: `mysql:5.7`) with container name `db`, using the previously created volume, and pass environment variables to the container to configure it
-- Inspect the MySQL container finding its private IP
-- Launch WordPress (image name: `wordpress:latest`) with container name `wordpress`, and pass environment variables to the container to configure it (using as db host the IP of the MySQL container).
+- Launch MariaDB (image name: `mariadb:10.6.4-focal`) with container name `db`, using the previously created volume, and pass environment variables to the container to configure it
+- Inspect the MariaDB container finding its private IP
+- Launch WordPress (image name: `wordpress:latest`) with container name `wordpress`, and pass environment variables to the container to configure it (using as DB host the IP of the MariaDB container).
