@@ -35,6 +35,8 @@ nav:
     - Work with your first container: 'container/manipulation.md'
   - Going further:
     - Run a dockerized service: 'container/example.md'
+  - Environment variables:
+    - How to pass env variables to a container: 'container/env_vars.md'  
   - Persistent data:
     - Docker volumes and bind-mounts: 'data/volumes.md'
     #- Docker volume plugins - an example: 'data/volume_plugin.md'
@@ -59,6 +61,10 @@ nav:
       - Publishing images to the Docker hub: 'image/registry/dockerhub.md'
     - multi-stage example:
       - Our first multi-stage Dockerfile: 'image/multistage/multistage-example.md'
+  - CI/CD build automation: 
+    - How to use Gitlab CI/CD to build your image automatically: 'image/automation/index.md'  
+    - Use your own runner from a dedicated VM: 'image/automation/runner.md'
+    - Exercises: 'image/automation/exercises.md'
 
  
 copyright: Copyright &copy; 2022 INFN
