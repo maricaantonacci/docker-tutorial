@@ -24,6 +24,8 @@ There are a few options that we can use to customize our health check instructio
 - start-period - DURATION (default: 0s)
 - retries - DURATION (default: 3)
 
+where
+
 - **interval** (option: `--health-interval`, default: 30s) - specifies the time between the health check for the application container. it waits for the specified time from one check to another.
 
 - **timeout** (option: `--health-timeout`, default: 30s) - specifies the time that the health check waits for a response to consider the status of the container. For example, if we define 30 seconds and our server doesn’t respond within 30 seconds, then it’s considered as failed.
