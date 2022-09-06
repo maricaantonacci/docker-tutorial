@@ -270,7 +270,7 @@ __Goal__: create a service based on two containers:
 1. WordPress 
 2. MariaDB 
 
-and then use your web browser to access wordpress on port 8080.
+and then use your web browser to access wordpress on port 80.
 
 !!! tip
 - Create a volume `db_data` to provide persistent storage for the DBMS
