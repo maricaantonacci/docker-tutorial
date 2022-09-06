@@ -24,6 +24,8 @@ There are a few options that we can use to customize our health check instructio
 - start-period - DURATION (default: 0s)
 - retries - DURATION (default: 3)
 
+where
+
 - **interval** (option: `--health-interval`, default: 30s) - specifies the time between the health check for the application container. it waits for the specified time from one check to another.
 
 - **timeout** (option: `--health-timeout`, default: 30s) - specifies the time that the health check waits for a response to consider the status of the container. For example, if we define 30 seconds and our server doesn’t respond within 30 seconds, then it’s considered as failed.
@@ -155,3 +157,11 @@ The container is now flagged as unhealthy.
 !!! question "Exercise"
     Restore the `index.html` file and verify the container status.
 
+## Lab challenge
+
+**Goal**: create a MariaDB container configuring a custom health check to check whether the server is available.
+
+!!! info "Hints"
+    * Search for mariadb official docker image on [docker hub](https://hub.docker.com/)
+    * Read the documentation and understand the minimum required environment variables to start your server
+    * Specify a simple health check using the tool "[mysqladmin](https://mariadb.com/kb/en/mysqladmin/)" to check if the server is alive   
