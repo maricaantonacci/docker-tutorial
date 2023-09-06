@@ -8,11 +8,10 @@ Let's see what happens:
 ```bash
 Unable to find image 'ubuntu:latest' locally
 latest: Pulling from library/ubuntu
-345e3491a907: Pull complete
-57671312ef6f: Pull complete
-5e9250ddb7d0: Pull complete
-Digest: sha256:adf73ca014822ad8237623d388cedf4d5346aa72c270c5acc01431cc93e18e2d
+445a6a12be2b: Pull complete
+Digest: sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054
 Status: Downloaded newer image for ubuntu:latest
+root@2c8a2962ca5c:/#
 ```
 
 We are inside the docker container!
@@ -27,30 +26,33 @@ We are inside the docker container!
 This is a fully fledged Ubuntu host, and we can do anything we like in it. Let's explore it a bit, starting with asking for its hostname:
 
 ```bash
-root@a5a2c01df566:/# hostname
-a5a2c01df566
+root@2c8a2962ca5c:/# hostname
+2c8a2962ca5c
 ```
 
-We can see that our container's hostname is the container ID. Let's have a look at the `/etc/hosts` file too.
+!!! tip
+    A container's hostname defaults to be the container's ID in Docker. You can override the hostname using `--hostname`.
+
+Let's have a look at the `/etc/hosts` file too.
 ```bash
-root@a5a2c01df566:/# cat /etc/hosts
+root@2c8a2962ca5c:/# cat /etc/hosts
 127.0.0.1	localhost
 ::1	localhost ip6-localhost ip6-loopback
 fe00::0	ip6-localnet
 ff00::0	ip6-mcastprefix
 ff02::1	ip6-allnodes
 ff02::2	ip6-allrouters
-172.17.0.2	a5a2c01df566
+172.17.0.2	2c8a2962ca5c
 ```
 Docker has also added a host entry for our container with its IP address. Let's also check out its networking configuration.
 
 ```bash
-root@a5a2c01df566:/# ip a
+root@2c8a2962ca5c:/# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-85: eth0@if86: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+6: eth0@if7: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
     link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
        valid_lft forever preferred_lft forever
@@ -61,15 +63,15 @@ root@a5a2c01df566:/# ip a
        apt update && apt install -y iproute2
     ```
 
-As we can see, we have the `lo` loopback interface and the `eth0@if86` network interface with an IP address of 172.17.0.2, just like any other host. 
+As we can see, we have the `lo` loopback interface and the `eth0@if7` network interface with an IP address of 172.17.0.2, just like any other host. 
 
 We can also check its running processes:
 
 ```bash
-root@a5a2c01df566:/# ps aux
+root@2c8a2962ca5c:/# ps aux
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root           1  0.0  0.0   4216  3588 pts/0    Ss   08:46   0:00 bash
-root         601  0.0  0.0   5896  2852 pts/0    R+   10:17   0:00 ps aux
+root           1  0.0  0.0   4624  3780 pts/0    Ss   07:43   0:00 bash
+root         352  0.0  0.0   7060  1568 pts/0    R+   07:53   0:00 ps aux
 ```
 
 Note that the process `bash` has PID 1. 
@@ -80,15 +82,16 @@ The container only runs for as long as the command we specified, `/bin/bash`, is
 So the container still exists but it's stopped:
 ```bash
 docker container ps -a
-CONTAINER ID   IMAGE     COMMAND   CREATED       STATUS                     PORTS     NAMES
-a5a2c01df566   ubuntu    "bash"    2 hours ago   Exited (0) 6 seconds ago             festive_cerf
+CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                      PORTS     NAMES
+2c8a2962ca5c   ubuntu        "bash"     11 minutes ago   Exited (0) 13 seconds ago             magical_sanderson
+3a3eb75d3da3   hello-world   "/hello"   22 minutes ago   Exited (0) 22 minutes ago             sharp_kepler
 ```
 ### Starting a stopped container
 We can start again our stopped container with `docker container start <container-id or container-name>`:
 
 ```bash
-docker container start a5a2c01df566
-a5a2c01df566
+docker container start 2c8a2962ca5c
+2c8a2962ca5c
 ```
 Our container will restart with the same options we had specified when we launched it with the `docker run` command.
 
@@ -105,8 +108,8 @@ This is useful when you want to see what is written in the standard output in re
 
 So running the `attach` command on our Ubuntu container will bring us back to our bash prompt:
 ```bash
-docker container attach a5a2c01df566
-root@a5a2c01df566:/#
+docker container attach 2c8a2962ca5c
+root@2c8a2962ca5c:/#
 ```
 
 You can detach from a container and leave it running using the `CTRL-p CTRL-q` key sequence.
@@ -121,30 +124,22 @@ The command can be run in background using the option `-d` or interactively usin
 Try the following command on your Ubuntu container:
 
 ```bash 
-docker exec -it a5a2c01df566 bash
-root@a5a2c01df566:/#
+docker exec -it 2c8a2962ca5c bash
+root@2c8a2962ca5c:/#
 ```
 Let's look at the processes inside the container:
 ```bash
-root@a5a2c01df566:/# ps aux
+root@2c8a2962ca5c:/# ps aux
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root           1  0.0  0.0   4108  3420 pts/0    Ss+  14:05   0:00 bash
-root           9  0.6  0.0   4108  3468 pts/1    Ss   14:06   0:00 bash
-root          17  0.0  0.0   5896  2848 pts/1    R+   14:06   0:00 ps aux
+root           1  0.0  0.0   4624  3844 pts/0    Ss+  07:55   0:00 bash
+root           9  0.0  0.0   4624  3788 pts/1    Ss   07:59   0:00 bash
+root          17  0.0  0.0   7060  1572 pts/1    R+   07:59   0:00 ps aux
 ```
 We can see that the `exec` command started a new shell session. 
-
-
-
-
-
-
 
 
 !!! tip
     Usually the `exec` command is used to launch `bash` within the container and work with that. 
     The `attach` command primarily is used if you quickly want to see the output of the main process (`PID 1`) directly and/or want to kill it.
     
-
-
 

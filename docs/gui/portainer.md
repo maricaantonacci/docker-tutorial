@@ -17,15 +17,15 @@ The UI will be exposed on port `9000` and you will be asked to create the initia
 
 ![](images/portainer_1.png)
 
-Then choose to manage the local Docker environment and click on Connect:
+Then choose to manage the local Docker environment clicking on `Get Started`:
 
 ![](images/portainer_2.png)
 
-If everything works as expected, You will then be shown the Portainer home page:
+If everything works as expected, you will then be shown the Portainer home page. Click on the `local` environment:
 
 ![](images/portainer_2a.png)
 
-In the menu clicking on `Dashboard` will open a summary view of your docker engine:
+In the menu, clicking on `Dashboard` will open a summary view of your docker engine:
 
 ![](images/portainer_3.png)
 

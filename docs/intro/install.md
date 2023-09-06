@@ -1,4 +1,4 @@
-We will install docker engine on our Ubuntu 20.05 (focal) Virtual Machine using the repository.
+We will install docker engine on our Ubuntu Jammy 22.04 (LTS) Virtual Machine using the repository.
 
 !!! info
     Full instructions are available at [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
@@ -13,7 +13,6 @@ We will install docker engine on our Ubuntu 20.05 (focal) Virtual Machine using 
        ca-certificates \
        curl \
        gnupg \
-       lsb-release
    ```
 
 2. Add Docker’s official GPG key:
@@ -25,8 +24,9 @@ We will install docker engine on our Ubuntu 20.05 (focal) Virtual Machine using 
 3. Use the following command to set up the repository:
 ``` bash
 echo \
- "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
- $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
 ## Install Docker Engine
@@ -35,7 +35,7 @@ Update the apt package index, and install the latest version of Docker Engine, c
 
 ```` bash
  sudo apt-get update
- sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ````
 
 
@@ -61,7 +61,7 @@ sudo usermod -aG docker $USER
     ```
 === "Example output"
     ```
-    Docker version 20.10.17, build 100c701
+    Docker version 24.0.5, build ced0996
     ```
 
 
