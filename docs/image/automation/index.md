@@ -4,7 +4,10 @@ In this section you'll learn how to leverage CI/CD pipilines in INFN baltig (or 
 
 - baltig.infn.it account and access
 - gitlab CLI:
-    - `curl -s https://gitlab.com/gitlab-org/cli/-/raw/main/scripts/install.sh | sudo sh`
+    ````bash
+    wget https://gitlab.com/gitlab-org/cli/-/releases/v1.32.0/downloads/glab_1.32.0_Linux_x86_64.deb
+    sudo dpkg -i glab_1.32.0_Linux_x86_64.deb
+    ````
 - a baltig token with 'api' and 'write_repository' scopes (see below)
 - having followed the [previous](../dockerfile/exercise.md) tutorial
 
@@ -28,6 +31,7 @@ $ glab auth login
 ? GitLab hostname: baltig.infn.it
 ? API hostname: baltig.infn.it
 - Logging into baltig.infn.it
+? How would you like to login? Token
 
 Tip: you can generate a Personal Access Token here https://baltig.infn.it/-/profile/personal_access_tokens
 The minimum required scopes are 'api' and 'write_repository'.
@@ -41,7 +45,6 @@ The minimum required scopes are 'api' and 'write_repository'.
 ✓ Configured API protocol
 ✓ Logged in as project_4873_bot
 ```
-
 
 ## Create a pipeline to automatically build your image
 
