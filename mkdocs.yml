@@ -12,6 +12,7 @@ theme:
     - navigation.expand
     - navigation.top
     - toc.integrate
+    - content.code.copy
 markdown_extensions:
   - toc:
       permalink: true
