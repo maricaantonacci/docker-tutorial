@@ -15,9 +15,7 @@ The objective here is to try to use multi-stage images in practice. To this end 
 Here is the final Dockerfile:
 
 ```Dockerfile
-FROM ubuntu AS compiler
-RUN apt-get update
-RUN apt-get install -y build-essential
+FROM gcc:9.5.0 AS compiler
 ADD https://raw.githubusercontent.com/docker-library/hello-world/master/hello.c  /hello.c
 RUN make hello
 FROM ubuntu
