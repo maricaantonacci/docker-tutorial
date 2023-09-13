@@ -18,7 +18,7 @@ Here is the final Dockerfile:
 FROM ubuntu AS compiler
 RUN apt-get update
 RUN apt-get install -y build-essential
-COPY hello.c /
+ADD https://raw.githubusercontent.com/docker-library/hello-world/master/hello.c  /hello.c
 RUN make hello
 FROM ubuntu
 COPY --from=compiler /hello /hello
