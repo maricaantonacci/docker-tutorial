@@ -1,7 +1,7 @@
 Let's start from a new nginx docker container:
 
 ```bash
-    `docker container run -d --name nginx nginx`
+docker container run -d --name nginx nginx
 ```
 
 The `inspect` command provided details about the networking configuration of the container:
