@@ -66,6 +66,9 @@ nav:
     - How to use Gitlab CI/CD to build your image automatically: 'image/automation/index.md'  
     - Use your own runner from a dedicated VM: 'image/automation/runner.md'
     - Exercises: 'image/automation/exercises.md'
+  - Multi-container applications with Docker Compose:
+    - Introduction: 'compose/intro.md'
+    - Docker compose: 'compose/howto.md'
 
  
 copyright: Copyright &copy; 2022 INFN
