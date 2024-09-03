@@ -12,6 +12,8 @@ In the following simple example we want to build a container that compiles a bas
 Example, a hello.c:
 
 ```c
+#include <stdio.h>
+
 int main () {
   puts("Hello, world!");
   return 0;
