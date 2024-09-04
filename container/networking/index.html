@@ -1,0 +1,1214 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Marica Antonacci - marica.antonacci@ba.infn.it">
+      
+      
+      
+        <link rel="prev" href="../example/">
+      
+      
+        <link rel="next" href="../volumes/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>Bridge mode and port mapping - Docker Tutorial - part 1</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#using-a-user-defined-bridge-network" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Docker Tutorial - part 1" class="md-header__button md-logo" aria-label="Docker Tutorial - part 1" data-md-component="logo">
+      
+  <img src="../../assets/logo_infn.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Docker Tutorial - part 1
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Bridge mode and port mapping
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/maricaantonacci/docker-tutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Docker Tutorial - part 1" class="md-nav__button md-logo" aria-label="Docker Tutorial - part 1" data-md-component="logo">
+      
+  <img src="../../assets/logo_infn.png" alt="logo">
+
+    </a>
+    Docker Tutorial - part 1
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/maricaantonacci/docker-tutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Intro
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Intro
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker info
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/hello-world/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run your first container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/images/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Where are Docker images stored?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker container lifecycle
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Docker Container manipulation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Docker Container manipulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manipulation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Work with your first container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Going further
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Going further
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run a dockerized service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Container networking
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Container networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Bridge mode and port mapping
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Bridge mode and port mapping
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-user-defined-bridge-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a user-defined bridge network
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Persistent data
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Persistent data
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../volumes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker volumes and bind-mounts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../volume_plugin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker volume plugins - an example
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../volume_summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Environment variables
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Environment variables
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../env_vars/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to pass env variables to a container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Docker web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Docker web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gui/portainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Portainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Bridge mode and port mapping</h1>
+
+<p>Let's start from the nginx docker container started in the previous section.</p>
+<p>The <code>inspect</code> command provided details about the networking configuration of the container:</p>
+<div class="highlight"><pre><span></span><code>...
+<span class="w">            </span><span class="s2">&quot;Networks&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;bridge&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                    </span><span class="s2">&quot;IPAMConfig&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Links&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Aliases&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;NetworkID&quot;</span>:<span class="w"> </span><span class="s2">&quot;0aa786b7de5fbfcd3e18db78511ed544d450bb0ad198cab0244bc8b83d30b514&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;EndpointID&quot;</span>:<span class="w"> </span><span class="s2">&quot;c3b64e072f7851e3bf55ba3685fa1fbdec6b9c59d18ae27e5e90a1be5728f54c&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.1&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.2&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPPrefixLen&quot;</span>:<span class="w"> </span><span class="m">16</span>,
+<span class="w">                    </span><span class="s2">&quot;IPv6Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">                    </span><span class="s2">&quot;MacAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;02:42:ac:11:00:02&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;DriverOpts&quot;</span>:<span class="w"> </span>null
+<span class="w">                </span><span class="o">}</span>
+<span class="w">            </span><span class="o">}</span>
+...
+</code></pre></div>
+<p>To list out the networks in your system, execute the following command:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>ls<span class="w"> </span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>NETWORK<span class="w"> </span>ID<span class="w">     </span>NAME<span class="w">      </span>DRIVER<span class="w">    </span>SCOPE
+0aa786b7de5f<span class="w">   </span>bridge<span class="w">    </span>bridge<span class="w">    </span><span class="nb">local</span>
+19747c3d0c9a<span class="w">   </span>host<span class="w">      </span>host<span class="w">      </span><span class="nb">local</span>
+36dc4ef5b900<span class="w">   </span>none<span class="w">      </span>null<span class="w">      </span><span class="nb">local</span>
+</code></pre></div>
+<p>As you can see, our container is attached to the default brige network <code>0aa786b7de5f</code> (long ID: 0aa786b7de5fbfcd3e18db78511ed544d450bb0ad198cab0244bc8b83d30b514).
+We get more details about this network with the <code>inspect</code> command:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>inspect<span class="w"> </span>0aa786b7de5f
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>
+<span class="w">    </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;Name&quot;</span>:<span class="w"> </span><span class="s2">&quot;bridge&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Id&quot;</span>:<span class="w"> </span><span class="s2">&quot;0aa786b7de5fbfcd3e18db78511ed544d450bb0ad198cab0244bc8b83d30b514&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Created&quot;</span>:<span class="w"> </span><span class="s2">&quot;2021-05-27T13:27:32.164161898Z&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Scope&quot;</span>:<span class="w"> </span><span class="s2">&quot;local&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Driver&quot;</span>:<span class="w"> </span><span class="s2">&quot;bridge&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;EnableIPv6&quot;</span>:<span class="w"> </span>false,
+<span class="w">        </span><span class="s2">&quot;IPAM&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Driver&quot;</span>:<span class="w"> </span><span class="s2">&quot;default&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Options&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;Config&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="o">{</span>
+<span class="w">                    </span><span class="s2">&quot;Subnet&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.0/16&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.1&quot;</span>
+<span class="w">                </span><span class="o">}</span>
+<span class="w">            </span><span class="o">]</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Internal&quot;</span>:<span class="w"> </span>false,
+<span class="w">        </span><span class="s2">&quot;Attachable&quot;</span>:<span class="w"> </span>false,
+<span class="w">        </span><span class="s2">&quot;Ingress&quot;</span>:<span class="w"> </span>false,
+<span class="w">        </span><span class="s2">&quot;ConfigFrom&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Network&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;ConfigOnly&quot;</span>:<span class="w"> </span>false,
+<span class="w">        </span><span class="s2">&quot;Containers&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;2f03f1f2cd100ec584349124a93f180fa743d1c3ab7bcc31c9d8156225d6f06a&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;Name&quot;</span>:<span class="w"> </span><span class="s2">&quot;nginx&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;EndpointID&quot;</span>:<span class="w"> </span><span class="s2">&quot;c3b64e072f7851e3bf55ba3685fa1fbdec6b9c59d18ae27e5e90a1be5728f54c&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;MacAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;02:42:ac:11:00:02&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;IPv4Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.2/16&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;IPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Options&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;com.docker.network.bridge.default_bridge&quot;</span>:<span class="w"> </span><span class="s2">&quot;true&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;com.docker.network.bridge.enable_icc&quot;</span>:<span class="w"> </span><span class="s2">&quot;true&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;com.docker.network.bridge.enable_ip_masquerade&quot;</span>:<span class="w"> </span><span class="s2">&quot;true&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;com.docker.network.bridge.host_binding_ipv4&quot;</span>:<span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;com.docker.network.bridge.name&quot;</span>:<span class="w"> </span><span class="s2">&quot;docker0&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;com.docker.network.driver.mtu&quot;</span>:<span class="w"> </span><span class="s2">&quot;1500&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Labels&quot;</span>:<span class="w"> </span><span class="o">{}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div>
+<p>We can see that the container has an IP address of <code>172.17.0.2</code> and uses the gateway address of the <code>docker0</code> interface.</p>
+<p>Now we know that our nginx service is running on port 80 inside the container. </p>
+<p>Indeed we can contact our service on port <code>80</code> using the IP <code>172.17.0.2</code>, try the following command from your docker host:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>http://172.17.0.2:80
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>&lt;!DOCTYPE<span class="w"> </span>html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome<span class="w"> </span>to<span class="w"> </span>nginx!&lt;/title&gt;
+&lt;style&gt;
+<span class="w">    </span>body<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>width:<span class="w"> </span>35em<span class="p">;</span>
+<span class="w">        </span>margin:<span class="w"> </span><span class="m">0</span><span class="w"> </span>auto<span class="p">;</span>
+<span class="w">        </span>font-family:<span class="w"> </span>Tahoma,<span class="w"> </span>Verdana,<span class="w"> </span>Arial,<span class="w"> </span>sans-serif<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome<span class="w"> </span>to<span class="w"> </span>nginx!&lt;/h1&gt;
+&lt;p&gt;If<span class="w"> </span>you<span class="w"> </span>see<span class="w"> </span>this<span class="w"> </span>page,<span class="w"> </span>the<span class="w"> </span>nginx<span class="w"> </span>web<span class="w"> </span>server<span class="w"> </span>is<span class="w"> </span>successfully<span class="w"> </span>installed<span class="w"> </span>and
+working.<span class="w"> </span>Further<span class="w"> </span>configuration<span class="w"> </span>is<span class="w"> </span>required.&lt;/p&gt;
+
+&lt;p&gt;For<span class="w"> </span>online<span class="w"> </span>documentation<span class="w"> </span>and<span class="w"> </span>support<span class="w"> </span>please<span class="w"> </span>refer<span class="w"> </span>to
+&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://nginx.org/&quot;</span>&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial<span class="w"> </span>support<span class="w"> </span>is<span class="w"> </span>available<span class="w"> </span>at
+&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://nginx.com/&quot;</span>&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank<span class="w"> </span>you<span class="w"> </span><span class="k">for</span><span class="w"> </span>using<span class="w"> </span>nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div>
+<p>All the containers attached to the default bridge network can talk each other.</p>
+<p>What if we want to reach the service running in the container using the local network on the host? </p>
+<p>Try the following command:</p>
+<p><div class="highlight"><pre><span></span><code>curl<span class="w"> </span>http://127.0.0.1:80
+</code></pre></div>
+It won't work..you will get: <code>curl: (7) Failed to connect to 127.0.0.1 port 80: Connection refused</code>...</p>
+<p>We need to publish the service port in the container to a port on our local network. This can be done using the <code>--publish</code> option (or <code>-p</code>) of the <code>docker container run</code> command. The correct syntax is:</p>
+<div class="highlight"><pre><span></span><code>--publish<span class="w"> </span>&lt;host<span class="w"> </span>port&gt;:&lt;container<span class="w"> </span>port&gt;
+</code></pre></div>
+<p>So let's start another container with this option:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>nginx2<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span>nginx
+</code></pre></div>
+<p>Look at the different description of the two containers:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>ps
+CONTAINER<span class="w"> </span>ID<span class="w">   </span>IMAGE<span class="w">     </span>COMMAND<span class="w">                  </span>CREATED<span class="w">          </span>STATUS<span class="w">          </span>PORTS<span class="w">                               </span>NAMES
+8d5609a40033<span class="w">   </span>nginx<span class="w">     </span><span class="s2">&quot;/docker-entrypoint.…&quot;</span><span class="w">   </span><span class="m">35</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span><span class="m">33</span><span class="w"> </span>seconds<span class="w">   </span><span class="m">0</span>.0.0.0:80-&gt;80/tcp,<span class="w"> </span>:::80-&gt;80/tcp<span class="w">   </span>nginx2
+2f03f1f2cd10<span class="w">   </span>nginx<span class="w">     </span><span class="s2">&quot;/docker-entrypoint.…&quot;</span><span class="w">   </span><span class="m">2</span><span class="w"> </span>hours<span class="w"> </span>ago<span class="w">      </span>Up<span class="w"> </span><span class="m">2</span><span class="w"> </span>hours<span class="w">      </span><span class="m">80</span>/tcp<span class="w">                              </span>nginx
+</code></pre></div>
+<p>We can see here that the container port 80 is mapped on the host port 80 (<code>0.0.0.0:80-&gt;80/tcp, :::80-&gt;80/tcp</code>).</p>
+<p>As before, the command <code>docker container inspect</code> provides further information:</p>
+<div class="highlight"><pre><span></span><code>...
+<span class="w">        </span><span class="s2">&quot;NetworkSettings&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Bridge&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;SandboxID&quot;</span>:<span class="w"> </span><span class="s2">&quot;c66c74726ef8185887d6057d9efd1a4870f0b4b77543213d3bb4fe80db2bd48b&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;HairpinMode&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;LinkLocalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;LinkLocalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;Ports&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;80/tcp&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                    </span><span class="o">{</span>
+<span class="w">                        </span><span class="s2">&quot;HostIp&quot;</span>:<span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span>,
+<span class="w">                        </span><span class="s2">&quot;HostPort&quot;</span>:<span class="w"> </span><span class="s2">&quot;80&quot;</span>
+<span class="w">                    </span><span class="o">}</span>,
+<span class="w">                    </span><span class="o">{</span>
+<span class="w">                        </span><span class="s2">&quot;HostIp&quot;</span>:<span class="w"> </span><span class="s2">&quot;::&quot;</span>,
+<span class="w">                        </span><span class="s2">&quot;HostPort&quot;</span>:<span class="w"> </span><span class="s2">&quot;80&quot;</span>
+<span class="w">                    </span><span class="o">}</span>
+<span class="w">                </span><span class="o">]</span>
+<span class="w">            </span><span class="o">}</span>,
+...
+</code></pre></div>
+<p>Now we can verify that our service is reachable on port 80 of our local network running the following command from the host:</p>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>http://127.0.0.1:80
+</code></pre></div>
+<p>Indeed you can reach your service also from outside using the IP of your host. If the inbound connectivity on port 80 is ensured by the firewall rules, you can connect to the nginx service using the browser on your local workstation.</p>
+<p><img alt="" src="../images/nginx.png" /> </p>
+<h3 id="using-a-user-defined-bridge-network">Using a user-defined bridge network<a class="headerlink" href="#using-a-user-defined-bridge-network" title="Permanent link">&para;</a></h3>
+<p>In the previous example we have seen that any container you run will be automatically attached to the default bridge network.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A user-defined bridge network has some important extra features w.r.t. the default one as described in the official <a href="https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge">docs</a> on this topic:</p>
+<ul>
+<li>Automatic DNS resolution between containers</li>
+<li>Better isolation</li>
+<li>Containers can be attached and detached from user-defined networks on the fly</li>
+<li>Each user-defined network creates a configurable bridge</li>
+</ul>
+</div>
+<p>Now use the <code>docker network create</code> command to create a user-defined bridge network:</p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>mynet
+</code></pre></div>
+You will get the ID of the newly created network, e.g.:</p>
+<div class="highlight"><pre><span></span><code>64319187a52ba82fcbff86b348b42c3ac847e5cfb6a2365b123b7de597ff6eee
+</code></pre></div>
+<p>List the docker networks: you will see also <code>mynet</code> in the list:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>ls
+NETWORK<span class="w"> </span>ID<span class="w">     </span>NAME<span class="w">      </span>DRIVER<span class="w">    </span>SCOPE
+0aa786b7de5f<span class="w">   </span>bridge<span class="w">    </span>bridge<span class="w">    </span><span class="nb">local</span>
+19747c3d0c9a<span class="w">   </span>host<span class="w">      </span>host<span class="w">      </span><span class="nb">local</span>
+64319187a52b<span class="w">   </span>mynet<span class="w">     </span>bridge<span class="w">    </span><span class="nb">local</span>
+36dc4ef5b900<span class="w">   </span>none<span class="w">      </span>null<span class="w">      </span><span class="nb">local</span>
+</code></pre></div>
+<p>We can use the <code>network connect</code> command to attach a container to a network.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The syntax for this command is:
+<code>docker network connect &lt;network identifier&gt; &lt;container identifier&gt;</code></p>
+</div>
+<p>Let's connect our first <code>nginx</code> container:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span>mynet<span class="w"> </span>nginx
+</code></pre></div>
+<p>Note that the container was already attached to the default bridge network. Let's inspect the container to get the new networking configuration:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>nginx
+</code></pre></div>
+<p><div class="highlight"><pre><span></span><code>...
+<span class="s2">&quot;Networks&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;bridge&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                    </span><span class="s2">&quot;IPAMConfig&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Links&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Aliases&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;NetworkID&quot;</span>:<span class="w"> </span><span class="s2">&quot;0aa786b7de5fbfcd3e18db78511ed544d450bb0ad198cab0244bc8b83d30b514&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;EndpointID&quot;</span>:<span class="w"> </span><span class="s2">&quot;c3b64e072f7851e3bf55ba3685fa1fbdec6b9c59d18ae27e5e90a1be5728f54c&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.1&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.2&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPPrefixLen&quot;</span>:<span class="w"> </span><span class="m">16</span>,
+<span class="w">                    </span><span class="s2">&quot;IPv6Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">                    </span><span class="s2">&quot;MacAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;02:42:ac:11:00:02&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;DriverOpts&quot;</span>:<span class="w"> </span>null
+<span class="w">                </span><span class="o">}</span>,
+<span class="w">                </span><span class="s2">&quot;mynet&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                    </span><span class="s2">&quot;IPAMConfig&quot;</span>:<span class="w"> </span><span class="o">{}</span>,
+<span class="w">                    </span><span class="s2">&quot;Links&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Aliases&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                        </span><span class="s2">&quot;2f03f1f2cd10&quot;</span>
+<span class="w">                    </span><span class="o">]</span>,
+<span class="w">                    </span><span class="s2">&quot;NetworkID&quot;</span>:<span class="w"> </span><span class="s2">&quot;64319187a52ba82fcbff86b348b42c3ac847e5cfb6a2365b123b7de597ff6eee&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;EndpointID&quot;</span>:<span class="w"> </span><span class="s2">&quot;a232b9e5a82960e12762b949bc83b3e3bd5357580f937b69cae7097384e9eb69&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.18.0.1&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.18.0.2&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPPrefixLen&quot;</span>:<span class="w"> </span><span class="m">16</span>,
+<span class="w">                    </span><span class="s2">&quot;IPv6Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">                    </span><span class="s2">&quot;MacAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;02:42:ac:12:00:02&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;DriverOpts&quot;</span>:<span class="w"> </span><span class="o">{}</span>
+<span class="w">                </span><span class="o">}</span>
+<span class="w">            </span><span class="o">}</span>
+...
+</code></pre></div>
+As you can see, our container has now two interfaces with IPs 172.17.0.2 (on the default network) and 172.18.0.2 (on <code>mynet</code> network).</p>
+<p>Note that we can also specify the network when we create the container using the <code>--network</code> option. Let's run the following command:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--net<span class="w"> </span>mynet<span class="w"> </span>ubuntu<span class="w"> </span>bash
+</code></pre></div>
+<p>In this way you have created a container that is connected to <code>mynet</code> network. </p>
+<p>All containers attached to a user-defined network can communicate using their names (automatic DNS resolution)..so you can contact the container <code>nginx</code> directly (you don't need to know its IP).</p>
+<p>Run the command <code>curl http://nginx</code> inside the ubuntu container to verify that the automatic DNS resolution is working:</p>
+<div class="highlight"><pre><span></span><code>root@2f03f1f2cd10:/#<span class="w"> </span>curl<span class="w"> </span>http://nginx
+&lt;!DOCTYPE<span class="w"> </span>html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome<span class="w"> </span>to<span class="w"> </span>nginx!&lt;/title&gt;
+&lt;style&gt;
+<span class="w">    </span>body<span class="w"> </span><span class="o">{</span>
+<span class="w">        </span>width:<span class="w"> </span>35em<span class="p">;</span>
+<span class="w">        </span>margin:<span class="w"> </span><span class="m">0</span><span class="w"> </span>auto<span class="p">;</span>
+<span class="w">        </span>font-family:<span class="w"> </span>Tahoma,<span class="w"> </span>Verdana,<span class="w"> </span>Arial,<span class="w"> </span>sans-serif<span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome<span class="w"> </span>to<span class="w"> </span>nginx!&lt;/h1&gt;
+&lt;p&gt;If<span class="w"> </span>you<span class="w"> </span>see<span class="w"> </span>this<span class="w"> </span>page,<span class="w"> </span>the<span class="w"> </span>nginx<span class="w"> </span>web<span class="w"> </span>server<span class="w"> </span>is<span class="w"> </span>successfully<span class="w"> </span>installed<span class="w"> </span>and
+working.<span class="w"> </span>Further<span class="w"> </span>configuration<span class="w"> </span>is<span class="w"> </span>required.&lt;/p&gt;
+
+&lt;p&gt;For<span class="w"> </span>online<span class="w"> </span>documentation<span class="w"> </span>and<span class="w"> </span>support<span class="w"> </span>please<span class="w"> </span>refer<span class="w"> </span>to
+&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://nginx.org/&quot;</span>&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial<span class="w"> </span>support<span class="w"> </span>is<span class="w"> </span>available<span class="w"> </span>at
+&lt;a<span class="w"> </span><span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://nginx.com/&quot;</span>&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank<span class="w"> </span>you<span class="w"> </span><span class="k">for</span><span class="w"> </span>using<span class="w"> </span>nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In order for the automatic DNS resolution to work you must assign custom names to the containers. Using the randomly generated name will not work.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021 INFN
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "toc.integrate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>
